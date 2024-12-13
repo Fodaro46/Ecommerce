@@ -1,7 +1,11 @@
 package com.esempio.Ecommerce.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "address")
 public class Address {
@@ -13,20 +17,18 @@ public class Address {
     @Column(name = "addres_line_1", nullable = false, length = 512)
     private String addresLine1;
 
-    public String getAddresLine1() {
-        return addresLine1;
-    }
+    @Column(name = "address_line_2", length = 512)
+    private String addressLine2;
 
-    public void setAddresLine1(String addresLine1) {
-        this.addresLine1 = addresLine1;
-    }
+    @Column(name = "city", nullable = false)
+    private String city;
 
-    public Long getId() {
-        return id;
-    }
+    @Column(name = "country", nullable = false, length = 75)
+    private String country;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private LocalUser user;
+
 
 }
