@@ -1,7 +1,10 @@
 package com.esempio.Ecommerce.api.controller.auth;
 
+import com.esempio.Ecommerce.api.model.LoginBody;
+import com.esempio.Ecommerce.api.model.LoginResponse;
 import com.esempio.Ecommerce.api.model.RegistrationBody;
 import com.esempio.Ecommerce.exception.UserAlreadyExistsException;
+import com.esempio.Ecommerce.model.LocalUser;
 import com.esempio.Ecommerce.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,17 @@ public class AuthenticationController {
             return ResponseEntity.ok().build();
         } catch (UserAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> loginUser(@Valid @RequestBody LoginBody loginBody){
+        String jwt = userService.loginUser(loginBody);
+        if(jwt == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }else{
+            LoginResponse response = new LoginResponse();
+            response.setJwt(jwt);
+            return ResponseEntity.ok(response);
         }
     }
  }
