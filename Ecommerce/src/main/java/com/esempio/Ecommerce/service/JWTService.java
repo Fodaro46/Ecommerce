@@ -25,6 +25,11 @@ public class JWTService {
     public void postConstruct() {
         algorithm = Algorithm.HMAC256(algorithmKey);
     }
+    /*
+    Genera un JWT basato su utente utilizzatore
+    @param user
+    @return JWT
+     */
     public String generateJWT(LocalUser user) {
         return JWT.create()
                 .withClaim(USERNAME_KEY, user.getUsername())
@@ -32,5 +37,8 @@ public class JWTService {
                 .withIssuer(issuer)
                 .sign(algorithm);
 
+    }
+    public String getUsername(String token) {
+        return JWT.decode(token).getClaim(USERNAME_KEY).asString();
     }
 }
