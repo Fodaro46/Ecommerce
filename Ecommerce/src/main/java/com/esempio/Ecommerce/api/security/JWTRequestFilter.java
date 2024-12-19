@@ -5,6 +5,7 @@ import com.esempio.Ecommerce.model.LocalUser;
 import com.esempio.Ecommerce.model.dao.LocalUserDAO;
 import com.esempio.Ecommerce.service.JWTService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.NonNull;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,8 @@ import jakarta.servlet.FilterChain;
 
 @Component
 public class JWTRequestFilter extends OncePerRequestFilter {
-    private JWTService jwtService;
-    private LocalUserDAO localUserDAO;
+    private final JWTService jwtService;
+    private final LocalUserDAO localUserDAO;
 
     public JWTRequestFilter(JWTService jwtService, LocalUserDAO localUserDAO) {
         this.jwtService = jwtService;
@@ -28,7 +29,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response,@NonNull FilterChain filterChain) throws ServletException, IOException {
         String tokenHeader = request.getHeader("Authorization");
         if (tokenHeader != null && tokenHeader.startsWith("Bearer")) {
             String token = tokenHeader.substring(7);

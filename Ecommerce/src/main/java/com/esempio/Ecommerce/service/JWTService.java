@@ -33,7 +33,7 @@ public class JWTService {
     public String generateJWT(LocalUser user) {
         return JWT.create()
                 .withClaim(USERNAME_KEY, user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + (expiryInSeconds*1000)))
+                .withExpiresAt(new Date(System.currentTimeMillis() + (expiryInSeconds* 1000L)))
                 .withIssuer(issuer)
                 .sign(algorithm);
 

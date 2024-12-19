@@ -13,9 +13,9 @@ import java.util.Optional;
 public class UserService {
 
 
-    private LocalUserDAO localUserDAO;
-    private EncryptionService encryptionService;
-    private JWTService jwtService;
+    private final LocalUserDAO localUserDAO;
+    private final EncryptionService encryptionService;
+    private final JWTService jwtService;
 
     public UserService(LocalUserDAO localUserDAO, EncryptionService encryptionService, JWTService jwtService) {
 
