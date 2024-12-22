@@ -1,16 +1,15 @@
 package com.esempio.Ecommerce.api.controller.auth;
 
-import com.esempio.Ecommerce.api.model.LoginBody;
-import com.esempio.Ecommerce.api.model.LoginResponse;
-import com.esempio.Ecommerce.api.model.RegistrationBody;
+import com.esempio.Ecommerce.api.dto.LoginBody;
+import com.esempio.Ecommerce.api.dto.LoginResponse;
+import com.esempio.Ecommerce.api.dto.RegistrationBody;
 import com.esempio.Ecommerce.exception.UserAlreadyExistsException;
-import com.esempio.Ecommerce.model.LocalUser;
+import com.esempio.Ecommerce.model.Entity.LocalUser;
 import com.esempio.Ecommerce.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

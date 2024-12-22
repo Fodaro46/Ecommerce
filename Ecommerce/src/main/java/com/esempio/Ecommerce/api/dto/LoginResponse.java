@@ -1,4 +1,4 @@
-package com.esempio.Ecommerce.api.model;
+package com.esempio.Ecommerce.api.dto;
 
 import lombok.Getter;
 import lombok.Setter;

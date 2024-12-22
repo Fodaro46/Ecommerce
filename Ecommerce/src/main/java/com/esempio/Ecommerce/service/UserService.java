@@ -1,9 +1,9 @@
 package com.esempio.Ecommerce.service;
 
-import com.esempio.Ecommerce.api.model.LoginBody;
-import com.esempio.Ecommerce.api.model.RegistrationBody;
+import com.esempio.Ecommerce.api.dto.LoginBody;
+import com.esempio.Ecommerce.api.dto.RegistrationBody;
 import com.esempio.Ecommerce.exception.UserAlreadyExistsException;
-import com.esempio.Ecommerce.model.LocalUser;
+import com.esempio.Ecommerce.model.Entity.LocalUser;
 import com.esempio.Ecommerce.model.dao.LocalUserDAO;
 import org.springframework.stereotype.Service;
 

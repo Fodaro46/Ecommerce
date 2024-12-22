@@ -1,7 +1,7 @@
 package com.esempio.Ecommerce.api.security;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.esempio.Ecommerce.model.LocalUser;
+import com.esempio.Ecommerce.model.Entity.LocalUser;
 import com.esempio.Ecommerce.model.dao.LocalUserDAO;
 import com.esempio.Ecommerce.service.JWTService;
 import jakarta.servlet.http.HttpServletRequest;

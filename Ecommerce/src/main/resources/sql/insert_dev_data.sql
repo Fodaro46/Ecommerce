@@ -17,7 +17,6 @@ DO $$
         order4 BIGINT;
         order5 BIGINT;
     BEGIN
-
         -- Retrieve user IDs from local_user table
         SELECT id INTO userId1 FROM local_user WHERE username = 'user1' LIMIT 1;
         SELECT id INTO userId2 FROM local_user WHERE username = 'user2' LIMIT 1;

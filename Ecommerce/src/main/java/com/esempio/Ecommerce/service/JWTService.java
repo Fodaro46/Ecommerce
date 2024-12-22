@@ -3,7 +3,7 @@ package com.esempio.Ecommerce.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.esempio.Ecommerce.model.LocalUser;
+import com.esempio.Ecommerce.model.Entity.LocalUser;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -1,5 +1,6 @@
-package com.esempio.Ecommerce.model;
+package com.esempio.Ecommerce.model.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +26,7 @@ public class Product {
 
     @Column(name = "price", nullable = false)
     private Double price;
+
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE, optional = false, orphanRemoval = true)
     private Inventory inventory;
