@@ -2,7 +2,7 @@ package com.esempio.Ecommerce.service;
 
 import com.esempio.Ecommerce.model.Entity.LocalUser;
 import com.esempio.Ecommerce.model.Entity.WebOrder;
-import com.esempio.Ecommerce.model.dao.WebOrderDAO;
+import com.esempio.Ecommerce.model.repository.WebOrderDAO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

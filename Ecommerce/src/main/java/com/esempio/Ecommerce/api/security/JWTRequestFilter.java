@@ -2,7 +2,7 @@ package com.esempio.Ecommerce.api.security;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.esempio.Ecommerce.model.Entity.LocalUser;
-import com.esempio.Ecommerce.model.dao.LocalUserDAO;
+import com.esempio.Ecommerce.model.repository.LocalUserRepository;
 import com.esempio.Ecommerce.service.JWTService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
@@ -21,9 +21,9 @@ import jakarta.servlet.FilterChain;
 @Component
 public class JWTRequestFilter extends OncePerRequestFilter {
     private final JWTService jwtService;
-    private final LocalUserDAO localUserDAO;
+    private final LocalUserRepository localUserDAO;
 
-    public JWTRequestFilter(JWTService jwtService, LocalUserDAO localUserDAO) {
+    public JWTRequestFilter(JWTService jwtService, LocalUserRepository localUserDAO) {
         this.jwtService = jwtService;
         this.localUserDAO = localUserDAO;
     }

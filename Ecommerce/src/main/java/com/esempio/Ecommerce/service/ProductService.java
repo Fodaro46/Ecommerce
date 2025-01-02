@@ -1,6 +1,6 @@
 package com.esempio.Ecommerce.service;
 
-import com.esempio.Ecommerce.model.dao.ProductDAO;
+import com.esempio.Ecommerce.model.repository.ProductDAO;
 import com.esempio.Ecommerce.model.Entity.Product;
 import org.springframework.stereotype.Service;
 

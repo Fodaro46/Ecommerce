@@ -4,7 +4,7 @@ import com.esempio.Ecommerce.api.dto.LoginBody;
 import com.esempio.Ecommerce.api.dto.RegistrationBody;
 import com.esempio.Ecommerce.exception.UserAlreadyExistsException;
 import com.esempio.Ecommerce.model.Entity.LocalUser;
-import com.esempio.Ecommerce.model.dao.LocalUserDAO;
+import com.esempio.Ecommerce.model.repository.LocalUserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -13,11 +13,11 @@ import java.util.Optional;
 public class UserService {
 
 
-    private final LocalUserDAO localUserDAO;
+    private final LocalUserRepository localUserDAO;
     private final EncryptionService encryptionService;
     private final JWTService jwtService;
 
-    public UserService(LocalUserDAO localUserDAO, EncryptionService encryptionService, JWTService jwtService) {
+    public UserService(LocalUserRepository localUserDAO, EncryptionService encryptionService, JWTService jwtService) {
 
         this.localUserDAO = localUserDAO;
         this.encryptionService = encryptionService;

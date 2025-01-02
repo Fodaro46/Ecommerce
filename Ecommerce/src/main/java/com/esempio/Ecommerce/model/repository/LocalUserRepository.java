@@ -1,11 +1,11 @@
-package com.esempio.Ecommerce.model.dao;
+package com.esempio.Ecommerce.model.repository;
 
 import com.esempio.Ecommerce.model.Entity.LocalUser;
-import org.springframework.data.repository.ListCrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface LocalUserDAO extends ListCrudRepository<LocalUser, Long> {
+public interface LocalUserRepository extends JpaRepository<LocalUser, Long> {
 
     Optional<LocalUser> findByUsernameIgnoreCase(String username);
 
