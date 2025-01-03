@@ -26,4 +26,12 @@ public class AuthenticationController {
 
     // Non necessario implementare /login o /register
     // Keycloak gestisce già il login e la registrazione
+
+    // Endpoint per il logout
+    @GetMapping("/logout")
+    public String logout(@AuthenticationPrincipal Jwt authentication) {
+        // Reindirizza a Keycloak per il logout
+        String logoutUrl = "http://localhost:8083/realms/Vercarix/protocol/openid-connect/logout?redirect_uri=http://localhost:8083";
+        return "Redirecting to logout: " + logoutUrl;
+    }
 }
