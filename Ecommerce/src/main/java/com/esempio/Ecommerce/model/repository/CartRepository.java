@@ -10,11 +10,11 @@ import java.util.Optional;
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
     /**
-     * Trova un carrello associato a un utente specifico.
+     * Trova un carrello attivo associato a un utente specifico.
      *
-     * @param userId l'ID dell'utente di cui cercare il carrello.
-     * @return un Optional contenente il carrello associato all'utente, se presente.
+     * @param userId l'ID dell'utente
+     * @return un Optional contenente il carrello attivo, se presente.
      */
-    Optional<Cart> findByUserId(Long userId);
-
+    Optional<Cart> findByUserIdAndIsActiveTrue(Long userId);
 }
+

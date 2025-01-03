@@ -9,9 +9,6 @@ import com.esempio.Ecommerce.model.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 public class CartService {
 
@@ -68,7 +65,7 @@ public class CartService {
     private Cart createNewCart(Long userId) {
         Cart newCart = new Cart();
         newCart.setUserId(userId);
-        newCart.setActive(true);
+        newCart.setIsActive(true);
         return cartRepository.save(newCart);
     }
 }

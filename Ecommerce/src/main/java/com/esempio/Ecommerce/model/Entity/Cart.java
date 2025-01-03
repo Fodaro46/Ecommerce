@@ -7,21 +7,55 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
 @Getter
+@Setter
 @Entity
 @Table(name = "cart")
 public class Cart {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private LocalUser user;  // Relazione con l'utente
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
+
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> items = new ArrayList<>();  // Lista degli articoli del carrello
+    private List<CartItem> cartItems = new ArrayList<>();
+
+    // Getter e setter
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public List<CartItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
+    }
 }
