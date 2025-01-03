@@ -19,8 +19,8 @@ public class Address {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "addres_line_1", nullable = false, length = 512)
-    private String addresLine1;
+    @Column(name = "address_line_1", nullable = false, length = 512)
+    private String addressLine1;
 
     @Column(name = "address_line_2", length = 512)
     private String addressLine2;
