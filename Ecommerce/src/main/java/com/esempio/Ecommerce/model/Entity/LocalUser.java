@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Setter
 @Getter
@@ -22,7 +24,6 @@ public class LocalUser {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    //non unique e lungo 1000 perché va validato
     @JsonIgnore
     @Column(name = "password", nullable = false, length = 1000)
     private String password;
@@ -40,4 +41,11 @@ public class LocalUser {
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }

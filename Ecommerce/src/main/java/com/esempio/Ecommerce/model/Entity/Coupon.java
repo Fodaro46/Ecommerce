@@ -7,32 +7,29 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Setter
 @Getter
 @Entity
-@Table(name = "web_order")
-public class WebOrder {
+@Table(name = "coupon")
+public class Coupon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private LocalUser user;
+    @Column(name = "code", nullable = false, unique = true)
+    private String code; // E.g., "SUMMER2025"
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
+    @Column(name = "discount_percentage", nullable = false)
+    private Double discountPercentage; // Percentuale di sconto applicabile.
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<WebOrderQuantities> quantities = new ArrayList<>();
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true; // Per tracciare se il coupon è attivo.
 
-    @Column(name = "status", nullable = false)
-    private String status;  // E.g., "pending", "paid", "shipped", "cancelled"
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private WebOrder order; // Coupon applicato a un ordine specifico.
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp

@@ -1,29 +1,27 @@
 package com.esempio.Ecommerce.model.Entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Getter
 @Setter
+@Getter
+@Entity
+@Table(name = "cart")
 public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
-    private Long userId;  // Se stai usando l'autenticazione con Keycloak, associare ogni carrello a un utente
 
-    @OneToMany(mappedBy = "cart")
-    private List<CartItem> items = new ArrayList<>();
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private LocalUser user;  // Relazione con l'utente
 
-    private Double totalPrice;
-
-    // Metodi getter e setter
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CartItem> items = new ArrayList<>();  // Lista degli articoli del carrello
 }

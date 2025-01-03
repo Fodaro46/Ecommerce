@@ -7,32 +7,29 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Setter
 @Getter
 @Entity
-@Table(name = "web_order")
-public class WebOrder {
+@Table(name = "payment")
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    private LocalUser user;
+    @JoinColumn(name = "order_id", nullable = false)
+    private WebOrder order; // Ogni pagamento è legato a un ordine specifico.
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
+    @Column(name = "payment_method", nullable = false)
+    private String paymentMethod; // E.g., "credit_card", "paypal"
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<WebOrderQuantities> quantities = new ArrayList<>();
+    @Column(name = "amount_paid", nullable = false)
+    private Double amountPaid;
 
-    @Column(name = "status", nullable = false)
-    private String status;  // E.g., "pending", "paid", "shipped", "cancelled"
+    @Column(name = "payment_status", nullable = false)
+    private String paymentStatus; // E.g., "completed", "failed", "pending"
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp

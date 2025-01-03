@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -20,10 +23,14 @@ public class Inventory {
     @JoinColumn(name = "product_id", nullable = false, unique = true)
     private Product product;
 
-    /** The quantity in stock. */
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-
+    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }
