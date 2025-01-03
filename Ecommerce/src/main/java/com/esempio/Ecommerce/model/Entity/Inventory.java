@@ -23,6 +23,10 @@ public class Inventory {
     @JoinColumn(name = "product_id", nullable = false, unique = true)
     private Product product;
 
+    @Version
+    @Column(name = "version", nullable = false)
+    private Long version;
+
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 

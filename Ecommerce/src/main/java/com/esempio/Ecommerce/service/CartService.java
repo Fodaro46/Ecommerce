@@ -6,6 +6,9 @@ import com.esempio.Ecommerce.model.Entity.Product;
 import com.esempio.Ecommerce.model.repository.CartItemRepository;
 import com.esempio.Ecommerce.model.repository.CartRepository;
 import com.esempio.Ecommerce.model.repository.ProductRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,8 @@ import java.util.Optional;
 @Service
 public class CartService {
 
+    @PersistenceContext
+    private EntityManager entityManager;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
@@ -27,9 +32,11 @@ public class CartService {
 
     @Transactional
     public Cart addItemToCart(Long userId, Long productId, Integer quantity) {
-        // Recupera il carrello attivo dell'utente
-        Cart cart = cartRepository.findByUserIdAndIsActiveTrue(userId)
-                .orElseGet(() -> createNewCart(userId));
+        // Recupera il carrello attivo dell'utente con lock pessimistico
+        Cart cart = entityManager.find(Cart.class,
+                cartRepository.findByUserIdAndIsActiveTrue(userId)
+                        .map(Cart::getId).orElseThrow(() -> new RuntimeException("Active cart not found")),
+                LockModeType.PESSIMISTIC_WRITE);
 
         // Verifica se l'articolo esiste già nel carrello
         CartItem existingItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId).orElse(null);
@@ -71,11 +78,12 @@ public class CartService {
         newCart.setIsActive(true);
         return cartRepository.save(newCart);
     }
+
     public Optional<Cart> getActiveCartForUser(Long userId) {
         return cartRepository.findByUserIdAndIsActiveTrue(userId);
     }
+
     public List<CartItem> getCartItems(Long cartId) {
         return cartItemRepository.findByCartId(cartId);
     }
-
 }
