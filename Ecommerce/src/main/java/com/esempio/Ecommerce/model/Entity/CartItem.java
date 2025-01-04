@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 @Entity
@@ -25,4 +27,7 @@ public class CartItem {
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;  // Quantità del prodotto nel carrello
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();  // Timestamp di creazione
 }

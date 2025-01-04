@@ -32,21 +32,24 @@ public class CartService {
 
     @Transactional
     public Cart addItemToCart(Long userId, Long productId, Integer quantity) {
-        // Recupera il carrello attivo dell'utente con lock pessimistico
-        Cart cart = entityManager.find(Cart.class,
-                cartRepository.findByUserIdAndIsActiveTrue(userId)
-                        .map(Cart::getId).orElseThrow(() -> new RuntimeException("Active cart not found")),
-                LockModeType.PESSIMISTIC_WRITE);
+        Cart cart = cartRepository.findByUserIdAndIsActiveTrue(userId)
+                .orElseGet(() -> createNewCart(userId));
 
-        // Verifica se l'articolo esiste già nel carrello
-        CartItem existingItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId).orElse(null);
+        cart = entityManager.find(Cart.class, cart.getId(), LockModeType.PESSIMISTIC_WRITE);
 
-        if (existingItem != null) {
-            // Aggiorna la quantità dell'articolo esistente
-            existingItem.setQuantity(existingItem.getQuantity() + quantity);
-            cartItemRepository.save(existingItem);
+        addOrUpdateCartItem(cart, productId, quantity);
+
+        return cart;
+    }
+
+    private void addOrUpdateCartItem(Cart cart, Long productId, Integer quantity) {
+        Optional<CartItem> existingItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), productId);
+
+        if (existingItem.isPresent()) {
+            CartItem item = existingItem.get();
+            item.setQuantity(item.getQuantity() + quantity);
+            cartItemRepository.save(item);
         } else {
-            // Aggiungi un nuovo articolo
             Product product = productRepository.findById(productId)
                     .orElseThrow(() -> new RuntimeException("Product not found"));
 
@@ -57,19 +60,6 @@ public class CartService {
 
             cartItemRepository.save(newItem);
         }
-
-        return cart;
-    }
-
-    @Transactional
-    public void removeItemFromCart(Long cartId, Long productId) {
-        cartItemRepository.findByCartIdAndProductId(cartId, productId)
-                .ifPresent(cartItemRepository::delete);
-    }
-
-    @Transactional
-    public void clearCart(Long cartId) {
-        cartItemRepository.deleteByCartId(cartId);
     }
 
     private Cart createNewCart(Long userId) {

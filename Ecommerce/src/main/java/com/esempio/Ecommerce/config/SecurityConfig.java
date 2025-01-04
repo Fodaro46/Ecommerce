@@ -23,14 +23,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disabilita CSRF
-                .cors(cors -> cors.disable()) // Disabilita CORS se necessario
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/register").permitAll() // Endpoint pubblici
-                        .anyRequest().authenticated() // Tutti gli altri endpoint richiedono autenticazione
+                        .requestMatchers("/auth/login", "/auth/register").permitAll()
+                        .requestMatchers("/api/cart/active/**").hasAuthority("client_admin")
+                        .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS)) // Sessione stateless
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); // Aggiungi filtro JWT
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

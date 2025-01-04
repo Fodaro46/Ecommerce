@@ -13,8 +13,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.FilterChain;
 
@@ -29,23 +32,37 @@ public class JWTRequestFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response,@NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         String tokenHeader = request.getHeader("Authorization");
         if (tokenHeader != null && tokenHeader.startsWith("Bearer")) {
             String token = tokenHeader.substring(7);
             try {
-                String username =jwtService.getUsername(token);
-                Optional<LocalUser> opUser= localUserDAO.findByUsernameIgnoreCase(username);
-                if(opUser.isPresent()){
-                    LocalUser user=opUser.get();
-                    UsernamePasswordAuthenticationToken authentication= new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+                String username = jwtService.getUsername(token);
+                Optional<LocalUser> opUser = localUserDAO.findByUsernameIgnoreCase(username);
+                if (opUser.isPresent()) {
+                    LocalUser user = opUser.get();
+
+                    // Estrazione dei ruoli
+                    List<String> realmRoles = jwtService.getRealmRoles(token);
+                    List<String> resourceRoles = jwtService.getResourceRoles(token, "vercarix-rest-api");
+
+                    // Unione dei ruoli
+                    List<String> roles = new ArrayList<>();
+                    roles.addAll(realmRoles);
+                    roles.addAll(resourceRoles);
+
+                    List<SimpleGrantedAuthority> authorities = roles.stream()
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toList());
+
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
 
             } catch (JWTDecodeException ex) {
+                // Gestione delle eccezioni
             }
-
         }
         filterChain.doFilter(request, response);
     }
