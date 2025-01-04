@@ -1,6 +1,5 @@
 package com.esempio.Ecommerce.api.security;
 
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.esempio.Ecommerce.model.Entity.LocalUser;
 import com.esempio.Ecommerce.model.repository.LocalUserRepository;
 import com.esempio.Ecommerce.service.JWTService;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,11 +22,11 @@ import jakarta.servlet.FilterChain;
 @Component
 public class JWTRequestFilter extends OncePerRequestFilter {
     private final JWTService jwtService;
-    private final LocalUserRepository localUserDAO;
+    private final LocalUserRepository localUserRepository;
 
-    public JWTRequestFilter(JWTService jwtService, LocalUserRepository localUserDAO) {
+    public JWTRequestFilter(JWTService jwtService, LocalUserRepository localUserRepository) {
         this.jwtService = jwtService;
-        this.localUserDAO = localUserDAO;
+        this.localUserRepository = localUserRepository;
     }
 
     @Override
@@ -38,19 +36,12 @@ public class JWTRequestFilter extends OncePerRequestFilter {
             String token = tokenHeader.substring(7);
             try {
                 String username = jwtService.getUsername(token);
-                Optional<LocalUser> opUser = localUserDAO.findByUsernameIgnoreCase(username);
+                Optional<LocalUser> opUser = localUserRepository.findByUsernameIgnoreCase(username);
                 if (opUser.isPresent()) {
                     LocalUser user = opUser.get();
 
                     // Estrazione dei ruoli
-                    List<String> realmRoles = jwtService.getRealmRoles(token);
-                    List<String> resourceRoles = jwtService.getResourceRoles(token, "vercarix-rest-api");
-
-                    // Unione dei ruoli
-                    List<String> roles = new ArrayList<>();
-                    roles.addAll(realmRoles);
-                    roles.addAll(resourceRoles);
-
+                    List<String> roles = jwtService.getRoles(token);
                     List<SimpleGrantedAuthority> authorities = roles.stream()
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
@@ -60,8 +51,9 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
 
-            } catch (JWTDecodeException ex) {
+            } catch (Exception ex) {
                 // Gestione delle eccezioni
+                ex.printStackTrace();
             }
         }
         filterChain.doFilter(request, response);

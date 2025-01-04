@@ -21,14 +21,19 @@ public class JWTService {
     private int expiryInSeconds;
     private Algorithm algorithm;
     private static final String USERNAME_KEY = "USERNAME";
-    private static final String REALM_ROLES_KEY = "realm_access.roles";
-    private static final String RESOURCE_ROLES_KEY = "resource_access.vercarix-rest-api.roles";
+    private static final String ROLES_KEY = "roles"; // Chiave dei ruoli
 
     @PostConstruct
     public void postConstruct() {
         algorithm = Algorithm.HMAC256(algorithmKey);
     }
 
+    /**
+     * Genera un JWT basato su utente utilizzatore
+     *
+     * @param user
+     * @return JWT
+     */
     public String generateJWT(LocalUser user) {
         return JWT.create()
                 .withClaim(USERNAME_KEY, user.getUsername())
@@ -37,17 +42,46 @@ public class JWTService {
                 .sign(algorithm);
     }
 
+    /**
+     * Estrae il nome utente dal token JWT
+     *
+     * @param token
+     * @return Nome utente
+     */
     public String getUsername(String token) {
         return JWT.decode(token).getClaim(USERNAME_KEY).asString();
     }
 
-    public List<String> getRealmRoles(String token) {
+    /**
+     * Estrae i ruoli dal token JWT
+     *
+     * @param token
+     * @return Lista di ruoli
+     */
+    public List<String> getRoles(String token) {
         DecodedJWT decodedJWT = JWT.decode(token);
-        return decodedJWT.getClaim(REALM_ROLES_KEY).asList(String.class);
+        return decodedJWT.getClaim(ROLES_KEY).asList(String.class);
     }
 
-    public List<String> getResourceRoles(String token, String resource) {
+    /**
+     * Estrae i ruoli del realm dal token JWT
+     *
+     * @param token
+     * @return Lista di ruoli del realm
+     */
+    public List<String> getRealmRoles(String token) {
         DecodedJWT decodedJWT = JWT.decode(token);
-        return decodedJWT.getClaim("resource_access." + resource + ".roles").asList(String.class);
+        return decodedJWT.getClaim("realm_access.roles").asList(String.class);
+    }
+
+    /**
+     * Estrae i ruoli delle risorse dal token JWT
+     *
+     * @param token
+     * @return Lista di ruoli delle risorse
+     */
+    public List<String> getResourceRoles(String token) {
+        DecodedJWT decodedJWT = JWT.decode(token);
+        return decodedJWT.getClaim("resource_access.vercarix-rest-api.roles").asList(String.class);
     }
 }
