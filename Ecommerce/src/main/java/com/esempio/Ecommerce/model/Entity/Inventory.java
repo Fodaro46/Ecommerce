@@ -30,7 +30,7 @@ public class Inventory {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
