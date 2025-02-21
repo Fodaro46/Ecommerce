@@ -1,5 +1,8 @@
 package com.esempio.Ecommerce.model.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +22,7 @@ public class CartItem {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "cart_id", nullable = false)
+    @JsonBackReference
     private Cart cart;  // Relazione con il carrello
 
     @ManyToOne(optional = false)
@@ -29,5 +33,6 @@ public class CartItem {
     private Integer quantity;  // Quantità del prodotto nel carrello
 
     @Column(name = "created_at", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime createdAt = LocalDateTime.now();  // Timestamp di creazione
 }
