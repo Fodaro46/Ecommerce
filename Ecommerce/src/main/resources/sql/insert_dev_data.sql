@@ -1,4 +1,4 @@
--- insert_dev_data.sql
+/*-- insert_dev_data.sql
 -- Script per inserire dati di esempio nel database per testare l'applicazione Ecommerce
 
 -- Assicurati di eseguire questo script su un database PostgreSQL configurato correttamente.
@@ -181,3 +181,4 @@ VALUES
     );
 
 -- Fine dello script
+*/

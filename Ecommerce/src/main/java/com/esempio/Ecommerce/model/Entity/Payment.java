@@ -1,4 +1,4 @@
-package com.esempio.Ecommerce.model.Entity;
+/*package com.esempio.Ecommerce.model.Entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -42,3 +42,4 @@ public class Payment {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime updatedAt;
 }
+*/
